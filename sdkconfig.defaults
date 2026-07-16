@@ -1,0 +1,28 @@
+# ESP-IDF defaults for Charger Monitor (ESP32-C3)
+# PlatformIO merges these into the generated sdkconfig on first build.
+
+# --- Console over the C3's native USB Serial/JTAG (no external UART adapter) ---
+CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=y
+CONFIG_ESP_CONSOLE_UART_DEFAULT=n
+
+# --- Bluetooth: NimBLE host. We are a central (scan + connect out), but the
+# PERIPHERAL role must stay enabled: it compiles the GATT/ATT *server*, which
+# auto-answers the ATT Exchange-MTU Request the charger sends us on connect.
+# Without it those requests are dropped ("ATT handler not found"), the charger's
+# ATT bearer times out after ~30 s, and it stops streaming notifications. ~3 KB
+# RAM for a stable link is a good trade. (Broadcaster stays off - we never advertise.)
+CONFIG_BT_ENABLED=y
+CONFIG_BT_NIMBLE_ENABLED=y
+CONFIG_BT_NIMBLE_ROLE_CENTRAL=y
+CONFIG_BT_NIMBLE_ROLE_OBSERVER=y
+CONFIG_BT_NIMBLE_ROLE_PERIPHERAL=y
+CONFIG_BT_NIMBLE_ROLE_BROADCASTER=n
+
+# --- Flash / logging ---
+CONFIG_ESPTOOLPY_FLASHSIZE_4MB=y
+CONFIG_LOG_DEFAULT_LEVEL_INFO=y
+
+# --- OTA: boot pending-verify images and auto-roll-back if not confirmed healthy
+#. The app calls esp_ota_mark_app_valid_cancel_rollback() once it comes
+# up cleanly; a boot loop before that reverts to the previous slot. ---
+CONFIG_BOOTLOADER_APP_ROLLBACK_ENABLE=y
