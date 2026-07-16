@@ -4,6 +4,8 @@ ESP32-C3 firmware that bridges a **Powertech MB3906** Bluetooth battery charger 
 your network - live telemetry and control in Home Assistant, a small web UI, and an
 OLED, all without the vendor phone app.
 
+![The built-in web UI: charge-stage stepper, capacity gauge, and live tiles](docs/web-ui.webp)
+
 The MB3906's BLE protocol is undocumented; it was reverse-engineered from scratch
 (see the [blog post](https://fremnet.net/posts/reverse-enginnering-mb3906)). The full protocol is
 written up in **[docs/PROTOCOL.md](docs/PROTOCOL.md)** so anyone else with this
@@ -120,6 +122,7 @@ components/
 docs/
   PROTOCOL.md           standalone BLE protocol reference
   design/               UI mockup (charge stepper + teardrop gauge)
+  web-ui.webp           the status page, live
 tools/
   ble_monitor.py        PC-side (bleak) charger client - the protocol oracle
   stamp_touch.py        regenerates the build stamp header each build
